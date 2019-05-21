@@ -3,10 +3,8 @@
 
 #include <math.h>
 
-struct Constraints {
-  double kMaxVelocity = 1.0;
-  double kMaxAcceleration = 1.0;
-};
+constexpr double kMaxVelocity = 1.0;
+constexpr double kMaxAcceleration = 1.0;
 
 class Profile {
 
@@ -27,7 +25,6 @@ class Profile {
   const double GetTime(bool ignore);
 
 private:
-  Constraints constraints_;
   ProfilePoint current_, goal_;
 };
 
