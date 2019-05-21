@@ -18,8 +18,7 @@ const double Profile::GetTime(bool ignore) {
   } else {
     if (max_v == kMaxVelocity) {
       // first part of trapezoid
-      double accel_time =
-          (goal_.velocity - current_.velocity) / kMaxAcceleration;
+      double accel_time = (kMaxVelocity - current_.velocity) / kMaxAcceleration;
       double accel_dist = .5 * kMaxVelocity * accel_time;
 
       double vel_time = delta_x - (2 * accel_dist);
