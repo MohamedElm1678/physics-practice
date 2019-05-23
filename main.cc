@@ -8,10 +8,10 @@ int main() {
     goal.position = 1.0;
     goal.velocity = 0.0;
   }
-  
+
   Profile profile(current);
   profile.SetGoal(goal);
 
-  std::cout << profile.GetTime(true) << std::endl;
+  std::cout << profile.GetTime(false) << std::endl;
   std::cout << current.velocity << std::endl;
 }

@@ -8,24 +8,23 @@ constexpr double kMaxAcceleration = 1.0;
 
 class Profile {
 
- public:
+public:
   struct ProfilePoint {
     double position = 0.0;
     double velocity = 0.0;
   };
- 
-  Profile(ProfilePoint current) {
-    current_ = current;
-  }
-  
-  void SetGoal(ProfilePoint goal) {
-    goal_ = goal;
-  }
-  
+
+  Profile(ProfilePoint current) { current_ = current; }
+
+  void SetGoal(ProfilePoint goal) { goal_ = goal; }
+
   const double GetTime(bool ignore);
+  const ProfilePoint GetSetpoint(double time);
 
 private:
   ProfilePoint current_, goal_;
+  double t1_, t2_, t3_;
+  bool triangle_;
 };
 
 #endif // PROFILE_H_
