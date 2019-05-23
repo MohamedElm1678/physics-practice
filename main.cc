@@ -12,6 +12,10 @@ int main() {
   Profile profile(current);
   profile.SetGoal(goal);
 
+
+
   std::cout << profile.GetTime(false) << std::endl;
+  profile.GetSetpoint(.5);
+
   std::cout << current.velocity << std::endl;
 }

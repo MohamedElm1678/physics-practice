@@ -47,16 +47,16 @@ const double Profile::GetTime(bool ignore) {
   triangle_ = triangle;
 }
 
-const Profile::ProfilePoint GetSetpoint(double time) {
-  Profile(current_) calculated_point;
-  calculated_point.GetTime(false);
+const Profile::ProfilePoint Profile::GetSetpoint(double time) {
+  ProfilePoint calculated_point;
+ // calculated_point.GetTime(false);
   // velocities
   double velocity, position;
   if (!triangle_) {
     if (time <= t1_) {
       velocity = current_.velocity + (time * kMaxAcceleration);
-      position =
-          (current_.velocity * t1_) + (.5 * kMaxAcceleration * std::pow(t1_, 2));
+      position = (current_.velocity * t1_) +
+                 (.5 * kMaxAcceleration * std::pow(t1_, 2));
     } else if (time >= t1_ && time <= (t1_ + t2_)) {
       velocity = kMaxVelocity;
       position =
@@ -72,22 +72,23 @@ const Profile::ProfilePoint GetSetpoint(double time) {
           ((kMaxVelocity * t2_) + (.5 * kMaxAcceleration * std::pow(t2_, 2))) +
           ((kMaxVelocity * t3_) + (.5 * kMaxAcceleration * std::pow(t3_, 2)));
     } else {
-     if (time <= t1_ ){
+      if (time <= t1_) {
         velocity = current_.velocity + (time * kMaxAcceleration);
-      position =
-          (current_.velocity * t1_) + (.5 * kMaxAcceleration * std::pow(t1_, 2));
-    } else if ( time >= t3_) {
+        position = (current_.velocity * t1_) +
+                   (.5 * kMaxAcceleration * std::pow(t1_, 2));
+      } else if (time >= t3_) {
         double max_v =
             std::sqrt((kMaxAcceleration * std::pow(current_.velocity, 2)) +
                       2 * kMaxAcceleration * goal_.position * kMaxAcceleration /
                           2 * kMaxAcceleration);
         velocity = max_v + (time * -kMaxAcceleration);
-      position =
-          (current_.velocity * t3_) + (.5 * kMaxAcceleration * std::pow(t3_, 2));
-    }
+        position = (current_.velocity * t3_) +
+                   (.5 * kMaxAcceleration * std::pow(t3_, 2));
+      }
     }
 
     calculated_point.velocity = velocity;
     calculated_point.position = position;
   }
+  return calculated_point;
 }
