@@ -1,25 +1,26 @@
 #include "profile.h"
+#include <iostream>
 
 const double Profile::GetTime(bool ignore) {
-  double delta_x = goal_.position - current_.position;
+  double delta_x = goal_.position - initial_.position;
   double discrim =
-      std::pow(current_.velocity, 2) + (2 * kMaxAcceleration * delta_x);
-  double max_v = std::sqrt((kMaxAcceleration * std::pow(current_.velocity, 2)) +
+      std::pow(initial_.velocity, 2) + (2 * kMaxAcceleration * delta_x);
+  double max_v = std::sqrt((kMaxAcceleration * std::pow(initial_.velocity, 2)) +
                            2 * kMaxAcceleration * goal_.position *
                                kMaxAcceleration / 2 * kMaxAcceleration);
   bool triangle;
   double total_time;
   if (ignore) {
     double full_send_time =
-        (current_.velocity + sqrt(discrim)) / kMaxAcceleration;
+        (initial_.velocity + sqrt(discrim)) / kMaxAcceleration;
     //  double full_send_time = delta_x / (.5 * (goal_.velocity +
-    //  current_.velocity)); double full_send_time = (current_.velocity +
+    //  initial_.velocity)); double full_send_time = (initial_.velocity +
     //  sqrt(discrim)) / kMaxAcceleration;
     return full_send_time;
   } else {
     if (max_v == kMaxVelocity) {
       // first part of trapezoid
-      double accel_time = (kMaxVelocity - current_.velocity) / kMaxAcceleration;
+      double accel_time = (kMaxVelocity - initial_.velocity) / kMaxAcceleration;
       double accel_dist = .5 * kMaxVelocity * accel_time;
 
       double vel_dist = delta_x - (2 * accel_dist);
@@ -45,6 +46,7 @@ const double Profile::GetTime(bool ignore) {
     }
   }
   triangle_ = triangle;
+  std::cout << "hi" << std::endl;
 }
 
 const Profile::ProfilePoint Profile::GetSetpoint(double time) {
@@ -54,35 +56,35 @@ const Profile::ProfilePoint Profile::GetSetpoint(double time) {
   double velocity, position;
   if (!triangle_) {
     if (time <= t1_) {
-      velocity = current_.velocity + (time * kMaxAcceleration);
-      position = (current_.velocity * t1_) +
+      velocity = initial_.velocity + (time * kMaxAcceleration);
+      position = (initial_.velocity * time) +
                  (.5 * kMaxAcceleration * std::pow(t1_, 2));
     } else if (time >= t1_ && time <= (t1_ + t2_)) {
       velocity = kMaxVelocity;
       position =
-          ((current_.velocity * t1_) +
+          ((initial_.velocity * t1_) +
            (.5 * kMaxAcceleration * std::pow(t1_, 2))) +
-          ((kMaxVelocity * t2_) + (.5 * kMaxAcceleration * std::pow(t2_, 2)));
+          ((kMaxVelocity * (time - t1_)) + (.5 * kMaxAcceleration * std::pow((time - t1_), 2)));
 
     } else if (time >= (t1_ + t2_)) {
       velocity = kMaxVelocity + (time * -kMaxAcceleration);
       position =
-          ((current_.velocity * t1_) +
+          ((initial_.velocity * t1_) +
            (.5 * kMaxAcceleration * std::pow(t1_, 2))) +
           ((kMaxVelocity * t2_) + (.5 * kMaxAcceleration * std::pow(t2_, 2))) +
-          ((kMaxVelocity * t3_) + (.5 * kMaxAcceleration * std::pow(t3_, 2)));
+          ((kMaxVelocity * (time - (t2_ + t1_)) + (.5 * kMaxAcceleration * std::pow((time - (t2_ + t1_), 2)))));
     } else {
       if (time <= t1_) {
-        velocity = current_.velocity + (time * kMaxAcceleration);
-        position = (current_.velocity * t1_) +
+        velocity = initial_.velocity + (time * kMaxAcceleration);
+        position = (initial_.velocity * t1_) +
                    (.5 * kMaxAcceleration * std::pow(t1_, 2));
       } else if (time >= t3_) {
         double max_v =
-            std::sqrt((kMaxAcceleration * std::pow(current_.velocity, 2)) +
+            std::sqrt((kMaxAcceleration * std::pow(initial_.velocity, 2)) +
                       2 * kMaxAcceleration * goal_.position * kMaxAcceleration /
                           2 * kMaxAcceleration);
         velocity = max_v + (time * -kMaxAcceleration);
-        position = (current_.velocity * t3_) +
+        position = (initial_.velocity * t3_) +
                    (.5 * kMaxAcceleration * std::pow(t3_, 2));
       }
     }

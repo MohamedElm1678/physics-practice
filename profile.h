@@ -14,7 +14,7 @@ public:
     double velocity = 0.0;
   };
 
-  Profile(ProfilePoint current) { current_ = current; }
+  Profile(ProfilePoint initial) { initial_ = initial; }
 
   void SetGoal(ProfilePoint goal) { goal_ = goal; }
 
@@ -22,7 +22,7 @@ public:
   const ProfilePoint GetSetpoint(double time);
 
 private:
-  ProfilePoint current_, goal_;
+  ProfilePoint initial_, goal_;
   double t1_, t2_, t3_;
   bool triangle_;
 };
