@@ -54,15 +54,15 @@ const Profile::ProfilePoint Profile::GetSetpoint(double time) {
   double velocity, position;
   if (!triangle_) {
     if (time <= t1_) {
-      velocity = initial_.velocity + (time * kMaxAcceleration);
+      velocity = initial_.velocity + (time * kMaxAcceleration); //vi + ta
       position = (initial_.velocity * time) +
-                 (.5 * kMaxAcceleration * std::pow(t1_, 2));
+                 (.5 * kMaxAcceleration * std::pow(t1_, 2)); // tvi + .5at^2
     } else if (time >= t1_ && time <= (t1_ + t2_)) {
       velocity = kMaxVelocity;
       position =
           ((initial_.velocity * t1_) +
            (.5 * kMaxAcceleration * std::pow(t1_, 2))) +
-          ((kMaxVelocity * (time - t1_)) + (.5 * kMaxAcceleration * std::pow((time - t1_), 2)));
+          ((kMaxVelocity * (time - t1_)) + (.5 * kMaxAcceleration * std::pow((time - t1_), 2))); //(vi * t1) +
 
     } else if (time >= (t1_ + t2_)) {
       velocity = kMaxVelocity + (time * -kMaxAcceleration);
@@ -71,7 +71,7 @@ const Profile::ProfilePoint Profile::GetSetpoint(double time) {
            (.5 * kMaxAcceleration * std::pow(t1_, 2))) +
           ((kMaxVelocity * t2_) + (.5 * kMaxAcceleration * std::pow(t2_, 2))) +
           ((kMaxVelocity * (time - (t2_ + t1_))) + (.5 * kMaxAcceleration * std::pow(time - (t2_ + t1_), 2)));
-    } else {
+  } else {
       if (time <= t1_) {
         velocity = initial_.velocity + (time * kMaxAcceleration);
         position = (initial_.velocity * t1_) +

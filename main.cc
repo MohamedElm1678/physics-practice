@@ -14,7 +14,7 @@ int main() {
 
 
   std::cout << profile.GetTime(false) << std::endl;
-  profile.GetSetpoint(.5);
+  Profile::ProfilePoint calc_pt =  profile.GetSetpoint(.5);
   
-  std::cout << initial.velocity << std::end;
+  std::cout << calc_pt.velocity << std::endl;
 }
