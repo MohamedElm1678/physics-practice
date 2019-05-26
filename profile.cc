@@ -46,12 +46,10 @@ const double Profile::GetTime(bool ignore) {
     }
   }
   triangle_ = triangle;
-  std::cout << "hi" << std::endl;
 }
 
 const Profile::ProfilePoint Profile::GetSetpoint(double time) {
-  ProfilePoint calculated_point;
- // calculated_point.GetTime(false);
+ // initial_.GetTime(false);
   // velocities
   double velocity, position;
   if (!triangle_) {
@@ -72,7 +70,7 @@ const Profile::ProfilePoint Profile::GetSetpoint(double time) {
           ((initial_.velocity * t1_) +
            (.5 * kMaxAcceleration * std::pow(t1_, 2))) +
           ((kMaxVelocity * t2_) + (.5 * kMaxAcceleration * std::pow(t2_, 2))) +
-          ((kMaxVelocity * (time - (t2_ + t1_)) + (.5 * kMaxAcceleration * std::pow((time - (t2_ + t1_), 2)))));
+          ((kMaxVelocity * (time - (t2_ + t1_))) + (.5 * kMaxAcceleration * std::pow(time - (t2_ + t1_), 2)));
     } else {
       if (time <= t1_) {
         velocity = initial_.velocity + (time * kMaxAcceleration);
@@ -89,8 +87,8 @@ const Profile::ProfilePoint Profile::GetSetpoint(double time) {
       }
     }
 
-    calculated_point.velocity = velocity;
-    calculated_point.position = position;
+    initial_.velocity = velocity;
+    initial_.position = position;
   }
-  return calculated_point;
+  return initial_;
 }
