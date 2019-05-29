@@ -20,12 +20,8 @@ int main() {
 
   std::ofstream outputFile("profile.csv");
 
-  
-  Profile::ProfilePoint calc_pt =  profile.GetSetpoint(.1);
-  
-  std::cout << calc_pt.velocity<< std::endl;
-  for (double i = 0; i < 2.0; i+= .005 ){
-  calc_pt =  profile.GetSetpoint(i);
+  for (double i = 0; i <= 2.0; i+= .005 ){
+  Profile::ProfilePoint calc_pt =  profile.GetSetpoint(i);
 	 outputFile << i << "," << calc_pt.position << "," << calc_pt.velocity << std::endl;
   }
 
