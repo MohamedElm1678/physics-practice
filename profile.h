@@ -20,10 +20,10 @@ public:
 
   const double GetTime(bool ignore);
   const ProfilePoint GetSetpoint(double time);
-
+  double total_time_ = t1_ + t2_ + t3_;
+  double t1_, t2_, t3_;
 private:
   ProfilePoint initial_, goal_;
-  double t1_, t2_, t3_;
   bool triangle_;
 };
 

@@ -45,7 +45,7 @@ const double Profile::GetTime(bool ignore) {
       t2_ = 0.0;
     }
   }
-  triangle_ = triangle;
+  triangle_ = true;
 }
 
 const Profile::ProfilePoint Profile::GetSetpoint(double time) {

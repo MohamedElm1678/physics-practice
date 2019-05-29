@@ -1,5 +1,7 @@
 #include "profile.h"
 #include <iostream>
+#include <fstream>
+#include <string>
 
 int main() {
   Profile::ProfilePoint initial;
@@ -14,7 +16,17 @@ int main() {
 
 
   std::cout << profile.GetTime(false) << std::endl;
-  Profile::ProfilePoint calc_pt =  profile.GetSetpoint(.5);
   
-  std::cout << calc_pt.velocity << std::endl;
+
+  std::ofstream outputFile("profile.csv");
+
+  
+  Profile::ProfilePoint calc_pt =  profile.GetSetpoint(.1);
+  
+  std::cout << calc_pt.velocity<< std::endl;
+  for (double i = 0; i < 2.0; i+= .005 ){
+  calc_pt =  profile.GetSetpoint(i);
+	 outputFile << i << "," << calc_pt.position << "," << calc_pt.velocity << std::endl;
+  }
+
 }
